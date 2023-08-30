@@ -77,11 +77,13 @@ async function changeImage() {
 
 			const topImage = await sharp(topImageFile).resize(2048, 2048).toBuffer();
 
-			sharp(imageFile)
+			const image = await sharp(imageFile)
 				.resize(2048, 2048)
 				.composite([{ input: topImage }])
 				.sharpen()
-				.toFile("test.png");
+				.toBuffer();
+
+			await guild.setIcon(image);
 		}
 
 		break;
