@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { Client, ChannelType, Message } from "discord.js";
+import axios from "axios";
 
 const config = require("../config.json");
 
@@ -47,6 +48,15 @@ async function changeImage() {
 	}
 
 	console.log(images);
+
+	while (true) {
+		const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
+		console.log(imageUrl);
+
+		const res = await axios({ url: imageUrl, method: "GET", responseType: "blob" });
+
+		break;
+	}
 }
 
 client.login(process.env.TOKEN);
