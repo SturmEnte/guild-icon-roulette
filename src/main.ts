@@ -1,6 +1,9 @@
 import "dotenv/config";
 import { Client, ChannelType, Message } from "discord.js";
 import axios from "axios";
+import sharp from "sharp";
+import fs from "fs";
+import path from "path";
 
 const config = require("../config.json");
 
@@ -53,7 +56,17 @@ async function changeImage() {
 		const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
 		console.log(imageUrl);
 
-		const res = await axios({ url: imageUrl, method: "GET", responseType: "blob" });
+		const res = await axios({ url: imageUrl, method: "GET", responseType: "stream" });
+
+		let image = Buffer.from("");
+
+		if (!fs.existsSync(path.join(__dirname, "../cache"))) fs.mkdirSync(path.join(__dirname, "../cache"));
+
+		const download = res.data.pipe(fs.createWriteStream(path.join(__dirname, "../cache", imageUrl.split("/")[imageUrl.split("/").length - 1])));
+
+		download.on("finish", () => {
+			console.log("Successfully downloaded file!");
+		});
 
 		break;
 	}
