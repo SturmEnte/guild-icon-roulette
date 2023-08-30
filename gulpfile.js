@@ -1,19 +1,19 @@
 const gulp = require("gulp");
 const fs = require("fs/promises");
-const { exec } = require("child_process");
+// const { exec } = require("child_process");
 
-async function clean() {
-	try {
-		await fs.rmdir("./build", { recursive: true });
-	} catch (err) {
-		console.log(err);
-	}
-	try {
-		await fs.mkdir("./build");
-	} catch (err) {
-		console.log(err);
-	}
-}
+// async function clean() {
+// 	try {
+// 		await fs.rmdir("./build", { recursive: true });
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// 	try {
+// 		await fs.mkdir("./build");
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// }
 
 async function copy() {
 	await fs.copyFile("./package.json", "./build/package.json");
@@ -23,17 +23,17 @@ async function copy() {
 	await fs.copyFile("./LICENSE", "./build/LICENSE");
 }
 
-async function typescript() {
-	await new Promise((resolve, reject) => {
-		exec("tsc", (error, stdout, stderr) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve(stdout);
-			}
-		});
-	});
-}
+// async function typescript() {
+// 	await new Promise((resolve, reject) => {
+// 		exec("tsc", (error, stdout, stderr) => {
+// 			if (error) {
+// 				reject(error);
+// 			} else {
+// 				resolve(stdout);
+// 			}
+// 		});
+// 	});
+// }
 
-var build = gulp.series(clean, gulp.parallel(copy, typescript));
+var build = gulp.series(copy);
 exports.default = build;
