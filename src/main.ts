@@ -56,17 +56,33 @@ async function changeImage() {
 		const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
 		console.log(imageUrl);
 
-		const res = await axios({ url: imageUrl, method: "GET", responseType: "stream" });
+		if (!fs.existsSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")))) {
+			const res = await axios({ url: imageUrl, method: "GET", responseType: "stream" });
 
-		let image = Buffer.from("");
+			if (!fs.existsSync(path.join(__dirname, "../cache"))) fs.mkdirSync(path.join(__dirname, "../cache"));
 
-		if (!fs.existsSync(path.join(__dirname, "../cache"))) fs.mkdirSync(path.join(__dirname, "../cache"));
+			const download = res.data.pipe(fs.createWriteStream(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex"))));
 
-		const download = res.data.pipe(fs.createWriteStream(path.join(__dirname, "../cache", imageUrl.split("/")[imageUrl.split("/").length - 1])));
+			download.on("finish", () => {
+				console.log("Successfully downloaded file!");
+				editImage();
+			});
+		} else {
+			editImage();
+		}
 
-		download.on("finish", () => {
-			console.log("Successfully downloaded file!");
-		});
+		async function editImage() {
+			const imageFile = fs.readFileSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")));
+			const topImageFile = fs.readFileSync(path.join(__dirname, "../", "top.png"));
+
+			const topImage = await sharp(topImageFile).resize(2048, 2048).toBuffer();
+
+			sharp(imageFile)
+				.resize(2048, 2048)
+				.composite([{ input: topImage }])
+				.sharpen()
+				.toFile("test.png");
+		}
 
 		break;
 	}
