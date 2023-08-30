@@ -13,9 +13,23 @@ client.on("ready", () => {
 	console.log("Client logged in as", client.user?.tag);
 
 	changeImage();
+
+	let changed = false;
+
+	setInterval(() => {
+		const date = new Date();
+		if (date.getHours() == 0 && date.getMinutes() == 0 && !changed) {
+			changeImage();
+			changed = true;
+		} else {
+			changed = false;
+		}
+	}, 1000);
 });
 
 async function changeImage() {
+	console.log("Setting new image");
+
 	const guild = await client.guilds.fetch(config.guild_id);
 	const channel = await guild.channels.fetch(config.image_channel_id);
 
@@ -52,41 +66,37 @@ async function changeImage() {
 
 	console.log(images);
 
-	while (true) {
-		const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
-		console.log(imageUrl);
+	const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
+	console.log(imageUrl);
 
-		if (!fs.existsSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")))) {
-			const res = await axios({ url: imageUrl, method: "GET", responseType: "stream" });
+	if (!fs.existsSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")))) {
+		const res = await axios({ url: imageUrl, method: "GET", responseType: "stream" });
 
-			if (!fs.existsSync(path.join(__dirname, "../cache"))) fs.mkdirSync(path.join(__dirname, "../cache"));
+		if (!fs.existsSync(path.join(__dirname, "../cache"))) fs.mkdirSync(path.join(__dirname, "../cache"));
 
-			const download = res.data.pipe(fs.createWriteStream(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex"))));
+		const download = res.data.pipe(fs.createWriteStream(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex"))));
 
-			download.on("finish", () => {
-				console.log("Successfully downloaded file!");
-				editImage();
-			});
-		} else {
+		download.on("finish", () => {
+			console.log("Successfully downloaded file!");
 			editImage();
-		}
+		});
+	} else {
+		editImage();
+	}
 
-		async function editImage() {
-			const imageFile = fs.readFileSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")));
-			const topImageFile = fs.readFileSync(path.join(__dirname, "../", "top.png"));
+	async function editImage() {
+		const imageFile = fs.readFileSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")));
+		const topImageFile = fs.readFileSync(path.join(__dirname, "../", "top.png"));
 
-			const topImage = await sharp(topImageFile).resize(2048, 2048).toBuffer();
+		const topImage = await sharp(topImageFile).resize(2048, 2048).toBuffer();
 
-			const image = await sharp(imageFile)
-				.resize(2048, 2048)
-				.composite([{ input: topImage }])
-				.sharpen()
-				.toBuffer();
+		const image = await sharp(imageFile)
+			.resize(2048, 2048)
+			.composite([{ input: topImage }])
+			.sharpen()
+			.toBuffer();
 
-			await guild.setIcon(image);
-		}
-
-		break;
+		await guild.setIcon(image);
 	}
 }
 
