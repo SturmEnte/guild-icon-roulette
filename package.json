@@ -1,30 +1,33 @@
 {
-  "name": "guild-icon-roulette",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/main.ts",
-  "scripts": {
-    "test": "nodemon src/main.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SturmEnte/guild-icon-roulette.git"
-  },
-  "author": "SturmEnte",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/SturmEnte/guild-icon-roulette/issues"
-  },
-  "homepage": "https://github.com/SturmEnte/guild-icon-roulette#readme",
-  "devDependencies": {
-    "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "tsc": "^2.0.4"
-  },
-  "dependencies": {
-    "axios": "^1.5.0",
-    "discord.js": "^14.13.0",
-    "dotenv": "^16.3.1",
-    "sharp": "^0.32.5"
-  }
+	"name": "guild-icon-roulette",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/main.ts",
+	"scripts": {
+		"start": "node src/main.js",
+		"test": "nodemon src/main.ts",
+		"build": "gulp"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SturmEnte/guild-icon-roulette.git"
+	},
+	"author": "SturmEnte",
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/SturmEnte/guild-icon-roulette/issues"
+	},
+	"homepage": "https://github.com/SturmEnte/guild-icon-roulette#readme",
+	"devDependencies": {
+		"gulp": "^4.0.2",
+		"nodemon": "^3.0.1",
+		"ts-node": "^10.9.1",
+		"tsc": "^2.0.4"
+	},
+	"dependencies": {
+		"axios": "^1.5.0",
+		"discord.js": "^14.13.0",
+		"dotenv": "^16.3.1",
+		"sharp": "^0.32.5"
+	}
 }

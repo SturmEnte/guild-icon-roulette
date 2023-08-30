@@ -1,5 +1,7 @@
+build/
+cache/
 node_modules/
+
 .env
 config.json
 top.png
-cache/
