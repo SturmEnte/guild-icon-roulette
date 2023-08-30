@@ -1,0 +1,27 @@
+{
+  "name": "guild-icon-roulette",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "nodemon src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SturmEnte/guild-icon-roulette.git"
+  },
+  "author": "SturmEnte",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/SturmEnte/guild-icon-roulette/issues"
+  },
+  "homepage": "https://github.com/SturmEnte/guild-icon-roulette#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
