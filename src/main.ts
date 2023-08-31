@@ -98,9 +98,10 @@ async function changeImage() {
 			.sharpen()
 			.toBuffer();
 
-		await guild.setIcon(image);
-		lastImage = Buffer.from(imageUrl, "utf8").toString("hex");
-		console.log("Successfully changed guild icon");
+		guild.setIcon(image).then(() => {
+			lastImage = Buffer.from(imageUrl, "utf8").toString("hex");
+			console.log("Successfully changed guild icon");
+		});
 	}
 }
 
