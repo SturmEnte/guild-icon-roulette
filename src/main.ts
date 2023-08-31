@@ -27,6 +27,8 @@ client.on("ready", () => {
 	}, 1000);
 });
 
+let lastImage = "";
+
 async function changeImage() {
 	console.log("Setting new image");
 
@@ -57,17 +59,17 @@ async function changeImage() {
 		newMessages.forEach((message) => {
 			const attachments = message.attachments.filter((attachment) => attachment.contentType?.startsWith("image"));
 			attachments.forEach((attachment) => {
-				images.push(attachment.url);
+				if (Buffer.from(attachment.url, "utf8").toString("hex") != lastImage) images.push(attachment.url);
 			});
 		});
 
 		options = { before: (<Message>newMessages.last()).id };
 	}
 
-	console.log(images);
+	console.log("Images:\n" + images);
 
 	const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
-	console.log(imageUrl);
+	console.log("Selected image:\n" + imageUrl);
 
 	if (!fs.existsSync(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex")))) {
 		const res = await axios({ url: imageUrl, method: "GET", responseType: "stream" });
@@ -77,7 +79,7 @@ async function changeImage() {
 		const download = res.data.pipe(fs.createWriteStream(path.join(__dirname, "../cache", Buffer.from(imageUrl).toString("hex"))));
 
 		download.on("finish", () => {
-			console.log("Successfully downloaded file!");
+			console.log("Successfully downloaded image:", imageUrl);
 			editImage();
 		});
 	} else {
@@ -97,6 +99,8 @@ async function changeImage() {
 			.toBuffer();
 
 		await guild.setIcon(image);
+		lastImage = Buffer.from(imageUrl, "utf8").toString("hex");
+		console.log("Successfully changed guild icon");
 	}
 }
 
