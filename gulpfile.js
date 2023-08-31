@@ -21,8 +21,8 @@ async function copy() {
 	await fs.copyFile("./Dockerfile", "./build/Dockerfile");
 	await fs.copyFile("./.dockerignore", "./build/.dockerignore");
 	await fs.copyFile("./LICENSE", "./build/LICENSE");
-	await fs.copyFile("./config.json");
-	await fs.copyFile("./top.png");
+	await fs.copyFile("./config.json", "./build/config.json");
+	await fs.copyFile("./top.png", "./build/top.png");
 }
 
 // async function typescript() {
