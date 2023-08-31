@@ -66,7 +66,8 @@ async function changeImage() {
 		options = { before: (<Message>newMessages.last()).id };
 	}
 
-	console.log("Images:\n" + images);
+	console.log("Images:\n");
+	console.log(images);
 
 	const imageUrl = images[Math.floor(Math.random() * (images.length - 1 - 0 + 1) + 0)];
 	console.log("Selected image:\n" + imageUrl);
